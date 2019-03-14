@@ -1,5 +1,6 @@
 import pygame,sys,time,sqlite3
 from pygame.locals import *
+from math import *
 import source.package1.package1
 import source.package2.package2
 import source.package3.package3
@@ -38,6 +39,7 @@ for row in cursor:
 	lock=row[5]
 time_font=pygame.font.SysFont('segoe print',64,bold=True,italic=False)
 date_font=pygame.font.SysFont('segoe print',24,bold=True,italic=False)
+number_font=pygame.font.SysFont('segoe print',21,bold=True,italic=False)
 white=(255,255,255)
 black=(0,0,0)
 def set_wallpaper(wallpaper_id):
@@ -97,17 +99,24 @@ def draw_menu_icons(mouse_pos,big_1,big_2,big_3,big_4,big_5,big_6,small_1,small_
 		surface.blit(small_4,(237,287))
 		surface.blit(small_5,(437,287))
 		surface.blit(big_6,(600,270))
-def back_to_home(wallpaper,wallpaper_id,w,database_location,lock):
+def back_to_home(wallpaper,w,database_location,lock):
 	i=-200
+	conn=sqlite3.connect(database_location)
+	cur=conn.cursor()
+	cursor=conn.execute("SELECT * from settings;")
+	for row in cursor:
+		wallpaper_id=row[0]
+		time_type=row[11]
+	wallpaper=set_wallpaper(wallpaper_id)
 	while i<=100:
 		surface.fill((255,255,255))
 		surface.blit(wallpaper,(0,0))
 		i+=40
-		print_time(i)
+		print_time(i,time_type)
 		pygame.display.update()
 		ft.tick(fps)
-	home(wallpaper_id,w,database_location,lock)
-def menu(wallpaper,wallpaper_id,w,database_location,lock):
+	home(wallpaper,database_location,lock)
+def menu(wallpaper,w,database_location,lock):
 	conn=sqlite3.connect(database_location)
 	cur=conn.cursor()
 	cursor=conn.execute("SELECT * from settings;")
@@ -118,6 +127,7 @@ def menu(wallpaper,wallpaper_id,w,database_location,lock):
 		cursor=conn.execute("SELECT * from settings;")
 		for row in cursor:
 			lock=row[5]
+			wallpaper_id=row[0]
 		surface.fill(white)
 		wallpaper=set_wallpaper(wallpaper_id)
 		surface.blit(wallpaper,(0,0))
@@ -142,7 +152,7 @@ def menu(wallpaper,wallpaper_id,w,database_location,lock):
 				sys.exit()
 			if event.type==KEYDOWN:
 				if event.key==pygame.K_BACKSPACE:
-					back_to_home(wallpaper,wallpaper_id,w,database_location,lock)
+					back_to_home(wallpaper,w,database_location,lock)
 				if event.key==pygame.K_RIGHT:
 					mouse_pos+=1
 					if mouse_pos>6:mouse_pos=1
@@ -159,17 +169,35 @@ def menu(wallpaper,wallpaper_id,w,database_location,lock):
 					if mouse_pos==3:mouse_pos=6
 				if event.key==pygame.K_RETURN:
 					if mouse_pos==1:
-						wallpaper_id=source.package1.package1.app1(surface,wallpaper,wallpaper_id,333,w)
+						try:
+							source.package1.package1.app1(surface,wallpaper,333,database_location,w)
+						except:
+							home(wallpaper,database_location,lock)
 					if mouse_pos==2:
-						source.package2.package2.app2(surface,wallpaper,334,database_location)
+						try:
+							source.package2.package2.app2(surface,wallpaper,334,database_location)
+						except:
+							home(wallpaper,database_location,lock)
 					if mouse_pos==3:
-						source.package3.package3.app3(surface,wallpaper,335,database_location)
+						try:
+							source.package3.package3.app3(surface,wallpaper,335,database_location)
+						except:
+							home(wallpaper,database_location,lock)
 					if mouse_pos==4:
-						source.package4.package4.app4(surface,wallpaper,336,database_location)
+						try:
+							source.package4.package4.app4(surface,wallpaper,336,database_location,w)
+						except:
+							home(wallpaper,database_location,lock)
 					if mouse_pos==5:
-						source.package5.package5.app5(surface,wallpaper,337,database_location)
+						try:
+							source.package5.package5.app5(surface,wallpaper,337,database_location)
+						except:
+							home(wallpaper,database_location,lock)
 					if mouse_pos==6:
-						source.package6.package6.app6(surface,wallpaper,338,database_location)
+						try:
+							source.package6.package6.app6(surface,wallpaper,338,database_location)
+						except:
+							home(wallpaper,database_location,lock)
 		pygame.display.update()
 		ft.tick(fps)
 def get_unlocked(wallpaper,lock):
@@ -215,23 +243,79 @@ def get_unlocked(wallpaper,lock):
 		pygame.display.update()
 		ft.tick(fps)
 	return status
-def transition_to_home(wallpaper,wallpaper_id,w,database_location,lock):
+def transition_to_home(wallpaper,w,database_location,lock):
 	i=100
+	conn=sqlite3.connect(database_location)
+	cur=conn.cursor()
+	cursor=conn.execute("SELECT * from settings;")
+	for row in cursor:
+		wallpaper_id=row[0]
+		time_type=row[11]
+	wallpaper=set_wallpaper(wallpaper_id)
 	while i>=-200:
 		surface.fill((255,255,255))
 		surface.blit(w[wallpaper_id],(0,0))
 		i-=40
-		print_time(i)
+		print_time(i,time_type)
 		pygame.display.update()
 		ft.tick(fps)
 	if lock>0:
 		status=get_unlocked(w[wallpaper_id],lock)
 	else:status="unlock"
 	if status=="unlock":
-		menu(wallpaper,wallpaper_id,w,database_location,lock)
+		menu(wallpaper,w,database_location,lock)
 	else:
-		back_to_home(wallpaper,wallpaper_id,w,database_location,lock)
-def print_time(a):
+		back_to_home(wallpaper,w,database_location,lock)
+def print_analog_time(timme,words,a):
+	#print("analog")
+	pygame.draw.circle(surface,white,(a+80,130),80,1)
+	
+	twelve_surface=number_font.render("12",False,(white))
+	three_surface=number_font.render("3",False,(white))
+	six_surface=number_font.render("6",False,(white))
+	nine_surface=number_font.render("9",False,(white))
+	
+	surface.blit(twelve_surface,(a+60,45))
+	surface.blit(three_surface,(a+10,110))
+	surface.blit(six_surface,(a+70,175))
+	surface.blit(nine_surface,(a+140,110))
+	
+	pygame.draw.line(surface,white,(a+39.8,60.8),(a+47,73.7),1)
+	pygame.draw.line(surface,white,(a+10.6,90),(a+23.6,97.6),1)
+	pygame.draw.line(surface,white,(a+10.7,170),(a+23.7,162.5),1)
+	pygame.draw.line(surface,white,(a+40,199),(a+47.5,186.3),1)
+	pygame.draw.line(surface,white,(a+120,199),(a+112.5,186),1)
+	pygame.draw.line(surface,white,(a+149,169.9),(a+136,162),1)
+	pygame.draw.line(surface,white,(a+149,90),(a+136,97.5),1)
+	pygame.draw.line(surface,white,(a+120,60.7),(a+112.5,73.7),1)
+	
+	second_angle=(360-(6*int(timme[2]))-90)*3.14/180
+	minute_angle=(360-(6*int(timme[1]))-90)*3.14/180
+	hour_angle=(360-(30*int(timme[0]))-90)*3.14/180
+	s1=180+(60*cos(second_angle))
+	s2=130+(60*sin(second_angle))
+	m1=180+(62*cos(minute_angle))
+	m2=130+(62*sin(minute_angle))
+	h1=180+(50*cos(hour_angle))
+	h2=130+(50*sin(hour_angle))
+	#print(timme,s1,s2)
+	pygame.draw.line(surface,white,(a+80,130),(s1,s2),1)
+	pygame.draw.line(surface,white,(a+80,130),(m1,m2),2)
+	pygame.draw.line(surface,white,(a+80,130),(h1,h2),3)
+	
+	actual_date=str(words[0])+"  "+str(words[1])+" "+str(words[2])
+	date_surface=date_font.render(actual_date,False,(white))
+	surface.blit(date_surface,(a+10,210))
+def print_digital_time(timme,words,a):
+	actual_time=str(timme[0])+":"+str(timme[1])
+	actual_date=str(words[0])+"  "+str(words[1])+" "+str(words[2])
+	#print(actual_time)
+	time_surface=time_font.render(actual_time,False,(white))
+	date_surface=date_font.render(actual_date,False,(white))
+	surface.blit(time_surface,(a,80))
+	surface.blit(date_surface,(a+10,165))
+	#print(a+10,80)
+def print_time(a,time_type):
 	timee=time.ctime()
 	words=timee.split(" ",4)
 	#print(words)
@@ -241,18 +325,20 @@ def print_time(a):
 		timme=words[4].split(":",2)
 	if int(timme[0])>12:
 		timme[0]=str(int(timme[0])-12)
-	actual_time=str(timme[0])+":"+str(timme[1])
-	actual_date=str(words[0])+"  "+str(words[1])+" "+str(words[2])
-	#print(actual_time)
-	time_surface=time_font.render(actual_time,False,(white))
-	date_surface=date_font.render(actual_date,False,(white))
-	#print(a+10,80)
-	surface.blit(time_surface,(a,80))
-	surface.blit(date_surface,(a+10,165))
-def home(wallpaper_id,w,database_location,lock):
+	if time_type=="digital":
+		print_digital_time(timme,words,a)
+	else:
+		print_analog_time(timme,words,a)
+def home(wallpaper,database_location,lock):
+	time_type="digital"
 	while True:
-		#print("home")
 		surface.fill(white)
+		#print("home")
+		conn=sqlite3.connect(database_location)
+		cursor=conn.execute("SELECT * from settings;")
+		for row in cursor:
+			wallpaper_id=row[0]
+			time_type=row[11]
 		wallpaper=set_wallpaper(wallpaper_id)
 		surface.blit(wallpaper,(0,0))
 		for event in pygame.event.get():
@@ -261,12 +347,17 @@ def home(wallpaper_id,w,database_location,lock):
 				sys.exit()
 			if event.type==KEYDOWN:
 				if event.key==pygame.K_RETURN or event.key==pygame.K_RIGHT:
-					transition_to_home(default_wallpaper,wallpaper_id,w,database_location,lock)
+					transition_to_home(wallpaper,w,database_location,lock)
 				if event.key==pygame.K_q:
 					pygame.quit()
 					sys.exit()
-		print_time(100)
+				if event.key==pygame.K_UP or event.key==pygame.K_DOWN:
+					if time_type=="digital":
+						time_type="analog"
+					else:
+						time_type="digital"
+		print_time(100,time_type)
 		pygame.display.update()
 		ft.tick(fps)
-default_wallpaper=set_wallpaper(wallpaper_id)
-home(wallpaper_id,w,database_location,lock)
+wallpaper=set_wallpaper(wallpaper_id)
+home(wallpaper,database_location,lock)
