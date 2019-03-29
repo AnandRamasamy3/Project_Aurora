@@ -18,5 +18,8 @@ Remember that, dont use backsppace for clearing text, use left key.
 You can add new secret notes with a 4 digit pin. The notes are stored with encrypted note with pin.
 On next next time you are opening the file you have to enter the same pin, you gave already.
 If not, it will show some wrong text.
+pins for the notes are
+aurora=0000
+alphabets=1234
 
 The last application chat is empty.
