@@ -11,9 +11,12 @@ from os import *
 pygame.init()
 fps=20
 ft=pygame.time.Clock()
-curent_directory=getcwd().replace(chr(92),chr(47))
-temp_list=curent_directory.split(":",2)
-curent_directory=temp_list[0]+":/"+temp_list[1]
+try:
+    current_directory=os.getcwd().replace(chr(92),chr(47))
+    temp_list=current_directory.split(":",2)
+    current_directory=temp_list[0]+":/"+temp_list[1]
+except:
+    current_directory=os.getcwd()
 white=(255,255,255)
 black=(0,0,0)
 red=(128,0,0)
