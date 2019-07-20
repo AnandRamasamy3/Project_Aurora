@@ -7,9 +7,12 @@ surface=pygame.display.set_mode((600+200,600-100),0,32)
 fps=20
 ft=pygame.time.Clock()
 pygame.display.set_caption('Towers of Hanoi')
-curent_directory=getcwd().replace(chr(92),chr(47))
-temp_list=curent_directory.split(":",2)
-curent_directory=temp_list[0]+":/"+temp_list[1]
+try:
+    current_directory=os.getcwd().replace(chr(92),chr(47))
+    temp_list=current_directory.split(":",2)
+    current_directory=temp_list[0]+":/"+temp_list[1]
+except:
+    current_directory=os.getcwd()
 wallpaper_icon_big=pygame.image.load(curent_directory+"/source/package3/sources/game2/icons/game2_big.png")
 wallpaper_icon_small=pygame.image.load(curent_directory+"/source/package3/sources/game2/icons/game2_small.png")
 white=(255,255,255)
