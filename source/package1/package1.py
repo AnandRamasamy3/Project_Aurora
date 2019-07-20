@@ -6,9 +6,13 @@ from os import *
 pygame.init()
 fps=20
 ft=pygame.time.Clock()
-current_directory=getcwd().replace(chr(92),chr(47))
-temp_list=current_directory.split(":",2)
-current_directory=temp_list[0]+":/"+temp_list[1]
+
+try:
+    current_directory=os.getcwd().replace(chr(92),chr(47))
+    temp_list=current_directory.split(":",2)
+    current_directory=temp_list[0]+":/"+temp_list[1]
+except:
+    current_directory=os.getcwd()
 conn=sqlite3.connect(current_directory+'/source/database/aos.db')
 cur=conn.cursor()
 wallpaper_icon_big=pygame.image.load(current_directory+"/source/package1/icons/icon_for_wallpaper_big.png")
