@@ -5,9 +5,12 @@ from os import *
 pygame.init()
 fps=20
 ft=pygame.time.Clock()
-curent_directory=getcwd().replace(chr(92),chr(47))
-temp_list=curent_directory.split(":",2)
-curent_directory=temp_list[0]+":/"+temp_list[1]
+try:
+    current_directory=os.getcwd().replace(chr(92),chr(47))
+    temp_list=current_directory.split(":",2)
+    current_directory=temp_list[0]+":/"+temp_list[1]
+except:
+    current_directory=os.getcwd()
 wallpaper_icon_big=pygame.image.load(curent_directory+"/source/package3/sources/game1/icons/game1_big.png")
 wallpaper_icon_small=pygame.image.load(curent_directory+"/source/package3/sources/game1/icons/game1_small.png")
 space_ship=pygame.image.load(curent_directory+"/source/package3/sources/game1/icons/space_ship.png")
