@@ -19,9 +19,13 @@ fps=20
 ft=pygame.time.Clock()
 surface=pygame.display.set_mode((800,500),0,32)
 pygame.display.set_caption('aurora_OS')
-current_directory=getcwd().replace(chr(92),chr(47))
-temp_list=current_directory.split(":",2)
-current_directory=temp_list[0]+":/"+temp_list[1]
+
+try:
+    current_directory=os.getcwd().replace(chr(92),chr(47))
+    temp_list=current_directory.split(":",2)
+    current_directory=temp_list[0]+":/"+temp_list[1]
+except:
+    current_directory=os.getcwd()
 #wallpaper_icon_big=pygame.image.load(curent_directory+"/source/package3/icons/games_big.png")
 w=[0,1,0,10,10,000,0]
 database_location=current_directory+'/source/database/aos.db'
