@@ -12,8 +12,8 @@ try:
     current_directory=temp_list[0]+":/"+temp_list[1]
 except:
     current_directory=os.getcwd()
-wallpaper_icon_big=pygame.image.load(curent_directory+"/source/package3/sources/game3/icons/game3_big.png")
-wallpaper_icon_small=pygame.image.load(curent_directory+"/source/package3/sources/game3/icons/game3_small.png")
+wallpaper_icon_big=pygame.image.load(current_directory+"/source/package3/sources/game3/icons/game3_big.png")
+wallpaper_icon_small=pygame.image.load(current_directory+"/source/package3/sources/game3/icons/game3_small.png")
 white=(255,255,255)
 black=(0,0,0)
 red=(128,0,0)
