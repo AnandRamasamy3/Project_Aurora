@@ -11,8 +11,8 @@ try:
     current_directory=temp_list[0]+":/"+temp_list[1]
 except:
     current_directory=os.getcwd()
-wallpaper_icon_big=pygame.image.load(curent_directory+"/source/package5/icons/notes_big.png")
-wallpaper_icon_small=pygame.image.load(curent_directory+"/source/package5/icons/notes_small.png")
+wallpaper_icon_big=pygame.image.load(current_directory+"/source/package5/icons/notes_big.png")
+wallpaper_icon_small=pygame.image.load(current_directory+"/source/package5/icons/notes_small.png")
 my_font=pygame.font.SysFont('segoe print',21,bold=True,italic=False)
 big_font=pygame.font.SysFont('segoe print',32,bold=True,italic=False)
 white=(255,255,255)
