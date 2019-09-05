@@ -325,6 +325,8 @@ def print_time(a,time_type):
 	#print(words)
 	try:
 		timme=words[3].split(":",2)
+		if len(timme)<2:
+			timme[4].split(":",2)
 	except:
 		timme=words[4].split(":",2)
 	if int(timme[0])>12:
