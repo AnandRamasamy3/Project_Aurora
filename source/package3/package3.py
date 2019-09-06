@@ -28,8 +28,8 @@ icon_big_3=source.package3.sources.game3.game3.get_app3_game3_big_icon()
 icon_small_1=source.package3.sources.game1.game1.get_app3_game1_small_icon()
 icon_small_2=source.package3.sources.game2.game2.get_app3_game2_small_icon()
 icon_small_3=source.package3.sources.game3.game3.get_app3_game3_small_icon()
-wallpaper_icon_big=pygame.image.load(curent_directory+"/source/package3/icons/games_big.png")
-wallpaper_icon_small=pygame.image.load(curent_directory+"/source/package3/icons/games_small.png")
+wallpaper_icon_big=pygame.image.load(current_directory+"/source/package3/icons/games_big.png")
+wallpaper_icon_small=pygame.image.load(current_directory+"/source/package3/icons/games_small.png")
 def draw_game_menu(surface,mouse_pos,icon_big_1,icon_big_2,icon_big_3,icon_small_1,icon_small_2,icon_small_3):
 	if mouse_pos==1:
 		surface.blit(icon_big_1,(200,50))
